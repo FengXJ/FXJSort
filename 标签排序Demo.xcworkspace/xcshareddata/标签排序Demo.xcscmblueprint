@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A6E570A2511DC26787531BABEC236F61353F1A90",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A6E570A2511DC26787531BABEC236F61353F1A90" : 0,
+    "8872A751C9FEFBE0DBFD11031966B74934004F45" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5BF2D9BA-39F4-4EBC-BC7D-32E5F6EFB9A2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A6E570A2511DC26787531BABEC236F61353F1A90" : "%E6%A0%87%E7%AD%BE%E6%8E%92%E5%BA%8FDemo\/",
+    "8872A751C9FEFBE0DBFD11031966B74934004F45" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "标签排序Demo",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "标签排序Demo.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.coding.net\/FXueJie\/chuangandemo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8872A751C9FEFBE0DBFD11031966B74934004F45"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/FengXJ\/FXJSort.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A6E570A2511DC26787531BABEC236F61353F1A90"
+    }
+  ]
+}
