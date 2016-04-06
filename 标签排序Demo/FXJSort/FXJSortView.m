@@ -6,6 +6,7 @@
 //  Copyright © 2016年 冯学杰. All rights reserved.
 //
 //  如果arr的数量超过100,需要手动修改代码
+//  水平太低 代码太乱，请见谅- -
 
 #import "FXJSortView.h"
 
@@ -19,13 +20,10 @@
     CGPoint recognizerPoint;
     NSMutableArray *secondSectionArr;//存放未选中的
 }
-
+//创建titleList
 -(void)numOfTitleBtns:(NSArray *)arr{
 
     self.backgroundColor = [UIColor whiteColor];
-    CGFloat headHeight = arr.count/numOfRow * (distance + buttonHeight);
-    self.headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, headHeight)];
-    [self addSubview:self.headView];
     
     secondSectionArr = [[NSMutableArray alloc]init];
     
@@ -58,7 +56,7 @@
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongPress:)];
         
         [btn addGestureRecognizer:longPress];
-        [self.headView addSubview:btn];
+        [self addSubview:btn];
        
     }
 
@@ -68,29 +66,28 @@
 -(void)touchBtn:(MyButton *)sender{
     if (sender.isDown == NO) {
         [self.newtitleArr removeObjectAtIndex:sender.tag-1];
-        [self changeUI:sender.tag];
-        
-        
+        [self changeUpTag:sender.tag];
+        sender.isDown = YES;
         sender.tag = secondSectionArr.count+100;
         NSString *title = sender.titleLabel.text;
         [secondSectionArr insertObject:title atIndex:0];
-        [self NextSection:sender];
-        for (int t = 0; t<secondSectionArr.count; t++) {
-            NSLog(@"%@",secondSectionArr[t]);
-        }
+        [self NextSection];
+        
     }else{
-        NSInteger weiZhi=secondSectionArr.count-sender.tag+100;
+        NSInteger weiZhi=secondSectionArr.count-sender.tag+100-1;
+        NSString *str = [secondSectionArr objectAtIndex:weiZhi];
         [secondSectionArr removeObjectAtIndex:weiZhi];
-
+        [self.newtitleArr addObject:str];
+        [self changeDownTag:sender.tag];
+        [self btnUp:sender];
     }
     
 
 }
 
 //第二个section
--(void)NextSection:(MyButton *)sender{
-    
-    sender.isDown = YES;
+-(void)NextSection{
+
     CGFloat firstSectionHeght = (self.newtitleArr.count / numOfRow +1) * (buttonHeight+distance);
     for (int i = 0; i< secondSectionArr.count; i++) {
             MyButton *button = [self viewWithTag:i+100];
@@ -104,8 +101,8 @@
             }];
     }
 }
-//改变后UI变化
--(void)changeUI:(NSInteger)changeTag{
+//改变后第一个secontion按钮的Btn变化
+-(void)changeUpTag:(NSInteger)changeTag{
     //修改后面btn的位置
     for (NSInteger i = changeTag; i<=self.newtitleArr.count; i++) {
         MyButton *button = [self viewWithTag:i+1];
@@ -117,13 +114,41 @@
         }];
     }
 }
+//改变后第二个secontion按钮的Btn变化
+-(void)changeDownTag:(NSInteger)changeTag{
+    //修改后面btn的位置
+    for (NSInteger i = changeTag; i<secondSectionArr.count+100; i++) {
+        MyButton *button = [self viewWithTag:i+1];
+        button.tag = i;
+        
+    }
+}
+
+-(void)btnUp:(MyButton *)sender{
+    sender.tag = self.newtitleArr.count;
+    sender.isDown = NO;
+    CGFloat btnX = distance + (buttonWidth + distance) * ((sender.tag-1) % numOfRow);
+    CGFloat btnY = (buttonHeight + distance) * ((sender.tag-1) / numOfRow);
+    [UIView animateWithDuration:0.3 animations:^{
+        sender.frame = CGRectMake(btnX, btnY, buttonWidth, buttonHeight);
+    }];
+    [self NextSection];
+    
+
+}
+
+
+#pragma mark - 按钮事件 
+
+#pragma mark - 手势事件
+
 //长按
 - (void)LongPress:(UIGestureRecognizer *)recognizer{
     
     MyButton *recognizerView = (MyButton *)recognizer.view;
     if (recognizerView.isDown == NO) {
         // 触碰点
-        recognizerPoint = [recognizer locationInView:self.headView];
+        recognizerPoint = [recognizer locationInView:self];
         //begin
         if (recognizer.state == UIGestureRecognizerStateBegan) {
             
@@ -138,7 +163,7 @@
         else if (recognizer.state == UIGestureRecognizerStateChanged){
             
             recognizerView.center = recognizerPoint;
-            for (MyButton *btn in self.headView.subviews) {
+            for (MyButton *btn in self.subviews) {
                 if (CGRectContainsPoint(btn.frame, recognizerView.center)&& btn!= recognizerView && btn.isDown ==NO) {
                     
                     if (btn.tag > recognizerView.tag) {
@@ -191,9 +216,6 @@
                 }
             }
         } else if (recognizer.state == UIGestureRecognizerStateEnded){
-            for (int t = 0; t<self.newtitleArr.count; t++) {
-                NSLog(@"%@",self.newtitleArr[t]);
-            }
             //长按结束
             [UIView animateWithDuration:0.2 animations:^{
                 recognizerView.transform = CGAffineTransformMakeScale(1.0, 1.0);

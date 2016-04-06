@@ -20,9 +20,6 @@
 
 @property (nonatomic , strong) NSMutableArray *newtitleArr;
 
-@property (nonatomic , strong) UIView *headView;
-
-@property (nonatomic , strong) UIView *secondView;
 @end
 
 @interface MyButton : UIButton
