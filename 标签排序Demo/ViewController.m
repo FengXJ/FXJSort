@@ -33,7 +33,7 @@
     SlideHeadView *slideVC = [[SlideHeadView alloc]init];
     [self.view addSubview:slideVC];
     
-    titleArr = @[@"美食",@"旅游",@"电影",@"招聘",@"娱乐",@"肯德基",@"美食",@"旅游",@"电影",@"招聘",@"娱乐",@"肯德基"];
+    titleArr = @[@"美食",@"旅游",@"电影",@"招聘",@"娱乐",@"肯德基",@"网吧",@"逛街",@"探险",@"流浪",@"LOL",@"图书馆"];
     slideVC.titlesArr = titleArr;
     
     for (int i = 0; i<titleArr.count; i++) {
@@ -57,7 +57,7 @@
 
 -(void)addBtn:(id)sender{
     SortViewController *sortVC = [[SortViewController alloc]init];
-    sortVC.titleArr = titleArr;
+    sortVC.titleArr = [NSMutableArray arrayWithArray:titleArr];
     [self presentViewController:sortVC animated: YES completion:nil];
 }
 - (void)didReceiveMemoryWarning {

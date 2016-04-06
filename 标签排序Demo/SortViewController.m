@@ -26,7 +26,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     FXJSortView *sortView = [[FXJSortView alloc]init];
-    [sortView numOfTitleBtns:self.titleArr];
+    NSArray *weixuanzhongArr = @[@"对三",@"呵呵",@"要不起"];
+    
+    [sortView firstTitleBtns:self.titleArr];
+    [sortView secondTitleBtns:weixuanzhongArr];
     [self.view addSubview:sortView];
     sortView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(70, 0,0 , 0));
     

@@ -19,21 +19,30 @@
 @implementation FXJSortView{
     CGPoint recognizerPoint;
     NSMutableArray *secondSectionArr;//存放未选中的
+    NSMutableArray *btnArr;//存放所有Btn 避免后面拖动判断时判断到其他控件
 }
+
+
 //创建titleList
--(void)numOfTitleBtns:(NSArray *)arr{
+-(void)firstTitleBtns:(NSArray *)arr{
 
     self.backgroundColor = [UIColor whiteColor];
     
-    secondSectionArr = [[NSMutableArray alloc]init];
+    self.lineImageView = [[UIImageView alloc]init];
+    self.lineImageView.backgroundColor = [UIColor grayColor];
+    [self addSubview:self.lineImageView];
     
+    secondSectionArr = [[NSMutableArray alloc]init];
+    btnArr = [[NSMutableArray alloc]init];
+    self.newtitleArr  = [[NSMutableArray alloc] init];
+    for(id obj in arr)
+    {
+        [self.newtitleArr addObject: obj];
+    }
     for (int i = 0; i < arr.count; i++) {
         
-        self.newtitleArr  = [[NSMutableArray alloc] init];
-        for(id obj in arr)
-        {
-            [self.newtitleArr addObject: obj];
-        }
+        
+       
         
         CGFloat btnX = distance + (buttonWidth + distance) * (i % numOfRow);
         CGFloat btnY = (buttonHeight + distance) * (i / numOfRow);
@@ -56,39 +65,61 @@
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongPress:)];
         
         [btn addGestureRecognizer:longPress];
+        [btnArr addObject:btn];
         [self addSubview:btn];
        
     }
 
 }
 
-//按钮改变
--(void)touchBtn:(MyButton *)sender{
-    if (sender.isDown == NO) {
-        [self.newtitleArr removeObjectAtIndex:sender.tag-1];
-        [self changeUpTag:sender.tag];
-        sender.isDown = YES;
-        sender.tag = secondSectionArr.count+100;
-        NSString *title = sender.titleLabel.text;
-        [secondSectionArr insertObject:title atIndex:0];
+-(void)secondTitleBtns:(NSArray *)arr{
+    for(id obj in arr)
+    {
+        [secondSectionArr addObject: obj];
+    }
+    for (int i = 0; i < arr.count; i++) {
+        
+
+        MyButton *btn = [MyButton buttonWithType:UIButtonTypeCustom];
+        btn.backgroundColor = [UIColor whiteColor];
+        [btn.layer setBorderWidth:0.3]; //边框宽度
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 0, 0, 0, 0.5 });
+        [btn.layer setBorderColor:colorref];//边框颜色
+        [btn.layer setMasksToBounds:YES];
+        [btn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+        btn.tag = i+100;
+        btn.isDown = YES;
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        [btn setTitle:arr[i] forState:UIControlStateNormal];
+        //事件
+        [btn addTarget:self action:@selector(touchBtn:) forControlEvents:UIControlEventTouchUpInside];
+        //添加手势
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongPress:)];
+        
+        [btn addGestureRecognizer:longPress];
+        [btnArr addObject:btn];
+        [self addSubview:btn];
         [self NextSection];
         
-    }else{
-        NSInteger weiZhi=secondSectionArr.count-sender.tag+100-1;
-        NSString *str = [secondSectionArr objectAtIndex:weiZhi];
-        [secondSectionArr removeObjectAtIndex:weiZhi];
-        [self.newtitleArr addObject:str];
-        [self changeDownTag:sender.tag];
-        [self btnUp:sender];
     }
-    
-
 }
 
-//第二个section
--(void)NextSection{
+#pragma mark - 按钮位置改变
 
-    CGFloat firstSectionHeght = (self.newtitleArr.count / numOfRow +1) * (buttonHeight+distance);
+//调整第二个section位置
+-(void)NextSection{
+    CGFloat row = 0.0;
+    if (self.newtitleArr.count % numOfRow ==0) {
+        row = (self.newtitleArr.count / numOfRow);
+    }else{
+        row = (self.newtitleArr.count / numOfRow +1);
+    }
+    
+    CGFloat firstSectionHeght = row * (buttonHeight+distance);
+    self.lineImageView.frame = CGRectMake(10, firstSectionHeght, SCREEN_WIDTH-20, 0.5);
+    
     for (int i = 0; i< secondSectionArr.count; i++) {
             MyButton *button = [self viewWithTag:i+100];
             //button现在的位置
@@ -114,17 +145,15 @@
         }];
     }
 }
-//改变后第二个secontion按钮的Btn变化
--(void)changeDownTag:(NSInteger)changeTag{
-    //修改后面btn的位置
-    for (NSInteger i = changeTag; i<secondSectionArr.count+100; i++) {
+
+-(void)btnUp:(MyButton *)sender{
+    //改变后第二个secontion按钮的Btn变化
+    for (NSInteger i = sender.tag; i<secondSectionArr.count+100; i++) {
         MyButton *button = [self viewWithTag:i+1];
         button.tag = i;
         
     }
-}
-
--(void)btnUp:(MyButton *)sender{
+    //修改上移按钮的位置
     sender.tag = self.newtitleArr.count;
     sender.isDown = NO;
     CGFloat btnX = distance + (buttonWidth + distance) * ((sender.tag-1) % numOfRow);
@@ -132,14 +161,34 @@
     [UIView animateWithDuration:0.3 animations:^{
         sender.frame = CGRectMake(btnX, btnY, buttonWidth, buttonHeight);
     }];
-    [self NextSection];
     
-
+    //修改后面btn的位置
+    [self NextSection];
 }
 
 
 #pragma mark - 按钮事件 
+//按钮改变
+-(void)touchBtn:(MyButton *)sender{
+    if (sender.isDown == NO) {
+        [self.newtitleArr removeObjectAtIndex:sender.tag-1];
+        [self changeUpTag:sender.tag];
+        
+        sender.isDown = YES;
+        sender.tag = secondSectionArr.count+100;
+        NSString *title = sender.titleLabel.text;
+        [secondSectionArr insertObject:title atIndex:0];
+        [self NextSection];
+        
+    }else{
+        NSInteger weiZhi=secondSectionArr.count-sender.tag+100-1;
+        NSString *str = [secondSectionArr objectAtIndex:weiZhi];
+        [secondSectionArr removeObjectAtIndex:weiZhi];
+        [self.newtitleArr addObject:str];
 
+        [self btnUp:sender];
+    }
+}
 #pragma mark - 手势事件
 
 //长按
@@ -163,7 +212,7 @@
         else if (recognizer.state == UIGestureRecognizerStateChanged){
             
             recognizerView.center = recognizerPoint;
-            for (MyButton *btn in self.subviews) {
+            for (MyButton *btn in btnArr) {
                 if (CGRectContainsPoint(btn.frame, recognizerView.center)&& btn!= recognizerView && btn.isDown ==NO) {
                     
                     if (btn.tag > recognizerView.tag) {

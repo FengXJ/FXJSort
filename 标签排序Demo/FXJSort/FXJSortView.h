@@ -12,13 +12,17 @@
 #define  SCREEN_WIDTH   [UIScreen mainScreen].bounds.size.width
 #define  SCREEN_HEIGHT  [UIScreen mainScreen].bounds.size.height
 
-#define defaultCount 9
 
 @interface FXJSortView : UIView
 
--(void)numOfTitleBtns:(NSArray *)arr;//创建Button
+-(void)firstTitleBtns:(NSArray *)arr;//创建已选Buttons
 
-@property (nonatomic , strong) NSMutableArray *newtitleArr;
+-(void)secondTitleBtns:(NSArray *)arr;
+
+@property (nonatomic , strong) NSMutableArray *newtitleArr; //已选中的
+
+@property (nonatomic , strong) UIImageView *lineImageView ;
+
 
 @end
 
