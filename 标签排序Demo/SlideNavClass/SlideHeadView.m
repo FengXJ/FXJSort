@@ -166,7 +166,9 @@ static CGFloat const MaxScale = 1.2;/** 选中文字放大  */
 -(void)setupTitleCenter:(UIButton *)sender
 {
     
+
     CGFloat offset = sender.center.x - (ScreenW-100) * 0.5;
+
     if (offset < 0) {
         offset = 0;
     }

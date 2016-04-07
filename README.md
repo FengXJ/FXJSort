@@ -1,8 +1,9 @@
 # FXJSort
 <br>
 顶部按钮长按后可随意拖动排序，点击按钮，按钮会进入下一行。在第二行的按钮不可以拖动，点击时会跳上第一行<br>
-![image](https://github.com/FengXJ/FXJSort/blob/master/标签排序Demo/FXJsort1.gif) 
-![image](https://github.com/FengXJ/FXJSort/blob/master/标签排序Demo/FXJsort2.gif) <br>
+gif图500KB一张，加载有点慢~ 找不到好用的gif图制作工具  T T<br>
+![image](https://github.com/FengXJ/FXJSort/blob/master/FXJsort1.gif) <br>
+![image](https://github.com/FengXJ/FXJSort/blob/master/FXJSort2.gif) <br>
 使用方法：<br>
 1: 将Demo中的FXJSort文件夹拖入项目，#import "FXJSortView.h"<br>
 <br>
